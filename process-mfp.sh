@@ -97,8 +97,9 @@ process_one () {
     MASK=$5
 
     DATASET="$DIR"/*.img
-    N_IMAGES=$(echo "$DATASET" | wc -w)
+    N_IMAGES=$(echo $DATASET | wc -w)
 
+    echo "#### PROCESSING $DATASET"
     dials.import "$DATASET"\
         slow_fast_beam_centre="$BEAM_CENTRE"\
         distance="$DISTANCE"
