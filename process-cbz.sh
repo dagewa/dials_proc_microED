@@ -225,6 +225,24 @@ joint_scale () {
     cd "$PROCDIR"
 }
 
-process
-compare_merging_stats
-joint_scale
+solve () {
+    cd "$PROCDIR"
+
+    mkdir -p shelx
+    cd shelx
+
+    mtz2hkl -f -o cbz.hkl $PROCDIR/joint_scale/joint_scaled.mtz
+    #xia2.to_shelx $PROCDIR/joint_scale/joint_scaled.mtz cbz
+    CELL=$(gemmi mtz -d $PROCDIR/joint_scale/joint_scaled.mtz | grep -m 1 cell | cut -c13-)
+    WAVELENGTH=$(gemmi mtz -d $PROCDIR/joint_scale/joint_scaled.mtz | tac | grep -m 1 wavelength | cut -c13-)
+    edtools.make_shelx -c $CELL -w $WAVELENGTH -s "P 21/n" -m "C15 H12 N2 O"
+    mv shelx.ins cbz.ins
+    shelxt cbz | tee shelxt.log
+
+    cd "$PROCDIR"
+}
+
+#process
+#compare_merging_stats
+#joint_scale
+solve
